@@ -7,6 +7,7 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "workspaces": ["packages/*"],
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
