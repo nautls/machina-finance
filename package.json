@@ -2,12 +2,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
+    "lint": "eslint src/** --fix",
+    "lint:check": "eslint src/**"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
