@@ -11,7 +11,7 @@ To allow a quick MVP bootstrapping and to have a clear view of priorities, the d
    - JS contract compiler. [[@fleet-sdk/compiler](https://github.com/fleet-sdk/fleet), done] 
    - JS contract unit testing tool. [[@fleet-sdk/mock-chain](https://github.com/fleet-sdk/fleet), done].
    - Configurable explorer. [[ergo-uexplorer](https://github.com/pragmaxim/ergo-uexplorer/), in progress] 
-   - Generic off-chain execution bots framework. [`ergomatic`, research phase]
+   - Generic off-chain execution bots framework. [[ergomatic](https://github.com/nautls/ergomatic), in progress]
 2. **Contracts**: With `compiler` and `mock-chain` in place we can start working on contracts.
 3. **MVP**: In this phase, a simple yet functional user interface will be built for community testing and feedback.
 4. **User Interface**: A "hand-tailored", professional-looking interface will be done during this phase.
