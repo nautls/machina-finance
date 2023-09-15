@@ -6,5 +6,5 @@ module.exports = {
   printWidth: 100,
   proseWrap: "preserve",
   singleQuote: false,
-  arrowParens: "always"
+  arrowParens: "always",
 };
