@@ -8,5 +8,15 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@fleet-sdk/mock-chain": "^0.2.2",
+    "@fleet-sdk/core": "^0.2.2",
+    "@fleet-sdk/compiler": "^0.2.2",
+    "@fleet-sdk/common": "^0.2.2",
+    "@fleet-sdk/serializer": "^0.2.2"
+  },
+  "devDependencies": {
+    "bun-types": "^1.0.2"
+  }
 }
