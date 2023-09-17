@@ -1,11 +1,14 @@
 import { ErgoTree, OutputBuilder } from "@fleet-sdk/core";
-import { SConstant, SIntType, STupleType } from "@fleet-sdk/serializer";
+import { SByteType, SCollType, SConstant, SIntType, STupleType } from "@fleet-sdk/serializer";
 import { TokenId } from "@fleet-sdk/common";
 import { compile } from "@fleet-sdk/compiler";
+import { gridzDefaults } from "./common";
 import settingsContract from "./contracts/Settings.es";
+import { hex } from "@fleet-sdk/crypto";
 
 type RequiredFields = {
   value: bigint;
+  // TODO: probably shouldnt be required if we need a input box?
   creationHeight: number;
   ergoTree: ErgoTree;
 };
@@ -70,20 +73,6 @@ export abstract class BoxObject<F> {
   abstract applyToBuilder(): OutputBuilder;
 }
 
-// TODO, allow this to be empty byte array, empty string "" fails fleet serialization
-const ERG_ASSET_ID = "1f";
-
-export const gridzDefaults = {
-  pitId: "",
-  oatId: "",
-  baseAssetId: ERG_ASSET_ID,
-  quoteAssetId: ERG_ASSET_ID,
-  makerFeePercent: 2,
-  takerFeePercent: 2,
-  executorFeePercent: 2,
-  minerFeePercent: 2,
-};
-
 type SettingsFields = typeof gridzDefaults;
 
 export class SettingsBoxObject extends BoxObject<SettingsFields> {
@@ -103,13 +92,15 @@ export class SettingsBoxObject extends BoxObject<SettingsFields> {
       minerFeePercent,
     } = this.fields;
 
-    this.addNfts(pitId, oatId);
+    const nftsIds = [pitId, oatId].map(hex.encode);
+    this.addNfts(...nftsIds);
 
     const intIntTupleType = new STupleType([new SIntType(), new SIntType()]);
+    const collByteType = new SCollType(new SByteType());
 
     return this.builder.setAdditionalRegisters({
-      R4: SConstant.from(baseAssetId).toHex(),
-      R5: SConstant.from(quoteAssetId).toHex(),
+      R4: new SConstant(collByteType, baseAssetId).toHex(),
+      R5: new SConstant(collByteType, quoteAssetId).toHex(),
       R6: new SConstant(intIntTupleType, [makerFeePercent, takerFeePercent]).toHex(),
       R7: new SConstant(intIntTupleType, [executorFeePercent, minerFeePercent]).toHex(),
     });
