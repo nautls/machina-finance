@@ -1,11 +1,12 @@
 import { ErgoTree, OutputBuilder } from "@fleet-sdk/core";
-import { SConstant, SInt, SIntType, STupleType, SPair } from "@fleet-sdk/serializer";
+import { SConstant, SIntType, STupleType } from "@fleet-sdk/serializer";
 import { TokenId } from "@fleet-sdk/common";
 import { compile } from "@fleet-sdk/compiler";
 import settingsContract from "./contracts/Settings.es";
 
 type RequiredFields = {
   value: bigint;
+  creationHeight: number;
   ergoTree: ErgoTree;
 };
 
@@ -19,9 +20,12 @@ export abstract class BoxObject<F> {
   constructor(fields: F, requiredFields?: Partial<RequiredFields>) {
     // allow the BoxObject fields to be overriden by parameters, this allows us to inject
     // bad data in tests
-    const { value, ergoTree } = { ...this.requiredFieldsDefaults, ...requiredFields };
+    const { value, ergoTree, creationHeight } = {
+      ...this.requiredFieldsDefaults,
+      ...requiredFields,
+    };
 
-    this.builder = new OutputBuilder(value, ergoTree);
+    this.builder = new OutputBuilder(value, ergoTree, creationHeight);
     this.fields = fields;
   }
 
@@ -34,8 +38,9 @@ export abstract class BoxObject<F> {
   }
 
   // if the ergotree was compiled from a contract string return the plaintext contract
+  // can be overriden by external code by providing an `ergoTree` in the constructors `requiredFields` parameter
   get contract(): string {
-    return "sigmaProp(false) // DEFAULT PLACEHOLDER";
+    return "sigmaProp(false) // BOX OBJECT DEFAULT PLACEHOLDER";
   }
 
   asOutput() {
@@ -53,6 +58,7 @@ export abstract class BoxObject<F> {
   private get requiredFieldsDefaults(): RequiredFields {
     return {
       value: 100000000n,
+      creationHeight: 100,
       ergoTree: compile(this.contract),
     };
   }
@@ -100,14 +106,12 @@ export class SettingsBoxObject extends BoxObject<SettingsFields> {
     this.addNfts(pitId, oatId);
 
     const intIntTupleType = new STupleType([new SIntType(), new SIntType()]);
-    const r6Value = SPair(SInt(makerFeePercent), SInt(takerFeePercent));
-    const r7Value = SPair(SInt(executorFeePercent), SInt(minerFeePercent));
 
     return this.builder.setAdditionalRegisters({
       R4: SConstant.from(baseAssetId).toHex(),
       R5: SConstant.from(quoteAssetId).toHex(),
-      R6: new SConstant(intIntTupleType, r6Value).toHex(),
-      R7: new SConstant(intIntTupleType, r7Value).toHex(),
+      R6: new SConstant(intIntTupleType, [makerFeePercent, takerFeePercent]).toHex(),
+      R7: new SConstant(intIntTupleType, [executorFeePercent, minerFeePercent]).toHex(),
     });
   }
 }
