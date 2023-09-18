@@ -1,3 +1,4 @@
+import { compile } from "@fleet-sdk/compiler";
 import { SByteType, SCollType, SConstant } from "@fleet-sdk/serializer";
 
 export function randomBytes(len: number): Uint8Array {
@@ -23,3 +24,5 @@ export const gridzDefaults = {
   executorFeePercent: 2,
   minerFeePercent: 2,
 };
+
+export const UNSPENDABLE_CONTRACT_ERGO_TREE = compile("sigmaProp(false)");
