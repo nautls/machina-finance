@@ -1,6 +1,5 @@
-import { ErgoTree, OutputBuilder } from "@fleet-sdk/core";
+import { ErgoTree, ErgoUnsignedInput, OutputBuilder } from "@fleet-sdk/core";
 import { SByteType, SCollType, SConstant, SIntType, STupleType } from "@fleet-sdk/serializer";
-import { TokenId } from "@fleet-sdk/common";
 import { compile } from "@fleet-sdk/compiler";
 import { UNSPENDABLE_CONTRACT_ERGO_TREE, gridzDefaults } from "./common";
 import settingsContract from "./contracts/Settings.es";
@@ -38,14 +37,6 @@ export abstract class BoxObject<F> {
     this.fields = fields;
   }
 
-  protected addNfts(...tokenIds: TokenId[]) {
-    const tokens = tokenIds.map((tokenId) => ({ tokenId, amount: 1n }));
-
-    this.builder.addTokens(tokens);
-
-    return this;
-  }
-
   // if the ergotree was compiled from a contract string return the plaintext contract
   // can be overriden by external code by providing an `ergoTree` in the constructors `requiredFields` parameter
   get contract(): string | undefined {
@@ -67,11 +58,13 @@ export abstract class BoxObject<F> {
   }
 
   asOutput() {
-    return this.applyFields().builder.build();
+    return this.applyToBuilder().builder.build();
   }
 
   asInput() {
-    throw new Error("no impl yet");
+    const output = this.asOutput();
+
+    return new ErgoUnsignedInput({ ...output, transactionId: "", index: 0, boxId: "" });
   }
 
   asDataInput() {
@@ -108,7 +101,7 @@ export class SettingsBoxObject extends BoxObject<SettingsFields> {
     } = this.fields;
 
     const nftsIds = [pitId, oatId].map(hex.encode);
-    this.addNfts(...nftsIds);
+    this.builder.addNfts(...nftsIds);
 
     const intIntTupleType = new STupleType([new SIntType(), new SIntType()]);
     const collByteType = new SCollType(new SByteType());
