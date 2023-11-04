@@ -1,6 +1,5 @@
-import { UnsignedTransaction } from "@fleet-sdk/common";
 import { BoxObject, SettingsBoxObject, SettingsFields } from "./box-objects";
-import { TransactionBuilder } from "@fleet-sdk/core";
+import { ErgoUnsignedTransaction, TransactionBuilder } from "@fleet-sdk/core";
 
 interface RequiredFields {
   creationHeight: number;
@@ -31,6 +30,10 @@ export abstract class TransactionObject<InF, OutF = InF> {
     this.builder.from(this.in.boxes.map((b) => b.asInput()));
 
     return this;
+  }
+
+  build(): ErgoUnsignedTransaction {
+    return this.applyToBuilder().builder.build();
   }
 }
 

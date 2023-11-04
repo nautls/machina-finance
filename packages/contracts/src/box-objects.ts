@@ -1,9 +1,10 @@
-import { ErgoTree, ErgoUnsignedInput, OutputBuilder } from "@fleet-sdk/core";
+import { ErgoTree, OutputBuilder } from "@fleet-sdk/core";
 import { SByteType, SCollType, SConstant, SIntType, STupleType } from "@fleet-sdk/serializer";
 import { compile } from "@fleet-sdk/compiler";
 import { UNSPENDABLE_CONTRACT_ERGO_TREE, gridzDefaults } from "./common";
 import settingsContract from "./contracts/Settings.es";
 import { hex } from "@fleet-sdk/crypto";
+import { mockUTxO } from "@fleet-sdk/mock-chain";
 
 type RequiredFields = {
   value: bigint;
@@ -62,13 +63,11 @@ export abstract class BoxObject<F> {
   }
 
   asInput() {
-    const output = this.asOutput();
-
-    return new ErgoUnsignedInput({ ...output, transactionId: "", index: 0, boxId: "" });
+    return mockUTxO(this.asOutput());
   }
 
   asDataInput() {
-    return this.asInput;
+    return this.asInput();
   }
 
   applyToBuilder(): BoxObject<F> {
