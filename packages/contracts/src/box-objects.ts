@@ -102,14 +102,11 @@ export class SettingsBoxObject extends BoxObject<SettingsFields> {
     const nftsIds = [pitId, oatId].map(hex.encode);
     this.builder.addNfts(...nftsIds);
 
-    const intIntTupleType = new STupleType([new SIntType(), new SIntType()]);
-    const collByteType = new SCollType(new SByteType());
-
     this.builder.setAdditionalRegisters({
-      R4: new SConstant(collByteType, baseAssetId).toHex(),
-      R5: new SConstant(collByteType, quoteAssetId).toHex(),
-      R6: new SConstant(intIntTupleType, [makerFeePercent, takerFeePercent]).toHex(),
-      R7: new SConstant(intIntTupleType, [executorFeePercent, minerFeePercent]).toHex(),
+      R4: SColl(SByte, baseAssetId).toHex(),
+      R5: SColl(SByte, quoteAssetId).toHex(),
+      R6: SPair(SInt(makerFeePercent), SInt(takerFeePercent)).toHex(),
+      R7: SPair(SInt(executorFeePercent), SInt(minerFeePercent)).toHex(),
     });
 
     return this;
