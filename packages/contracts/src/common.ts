@@ -1,5 +1,5 @@
 import { compile } from "@fleet-sdk/compiler";
-import { SByteType, SCollType, SConstant } from "@fleet-sdk/serializer";
+import { SByte, SColl } from "@fleet-sdk/serializer";
 
 export function randomBytes(len: number): Uint8Array {
   const array = new Uint8Array(len);

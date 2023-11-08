@@ -1,14 +1,13 @@
 import { ErgoTree, OutputBuilder } from "@fleet-sdk/core";
-import { SByteType, SCollType, SConstant, SIntType, STupleType } from "@fleet-sdk/serializer";
 import { compile } from "@fleet-sdk/compiler";
 import { UNSPENDABLE_CONTRACT_ERGO_TREE, gridzDefaults } from "./common";
 import settingsContract from "./contracts/Settings.es";
 import { hex } from "@fleet-sdk/crypto";
 import { mockUTxO } from "@fleet-sdk/mock-chain";
+import { SByte, SColl, SInt, SPair } from "@fleet-sdk/serializer";
 
 type RequiredFields = {
   value: bigint;
-  // TODO: probably shouldnt be required if we need a input box?
   creationHeight: number;
   ergoTree: ErgoTree;
 };
