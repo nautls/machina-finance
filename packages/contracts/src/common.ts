@@ -12,7 +12,7 @@ export function randomBytes(len: number): Uint8Array {
 export const randomModifierId = () => randomBytes(32);
 
 export const ERG_ASSET_ID = new Uint8Array([0]);
-export const ERG_ASSET_ID_SCONSTANT = new SConstant(new SCollType(new SByteType()), ERG_ASSET_ID);
+export const ERG_ASSET_ID_SCONSTANT = SColl(SByte, ERG_ASSET_ID);
 
 export const gridzDefaults = {
   pitId: randomModifierId(),
