@@ -5,6 +5,5 @@ module.exports = {
   quoteProps: "as-needed",
   printWidth: 100,
   proseWrap: "preserve",
-  singleQuote: false,
   arrowParens: "always",
 };

@@ -1,5 +1,6 @@
 {
   "name": "@machina-finance/contracts",
+  "type": "module",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -8,5 +9,16 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@fleet-sdk/mock-chain": "^0.2.3",
+    "@fleet-sdk/core": "^0.2.3",
+    "@fleet-sdk/crypto": "^0.2.3",
+    "@fleet-sdk/compiler": "^0.2.3",
+    "@fleet-sdk/common": "^0.2.3",
+    "@fleet-sdk/serializer": "^0.2.3"
+  },
+  "devDependencies": {
+    "bun-types": "^1.0.2"
+  }
 }
